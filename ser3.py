@@ -38,6 +38,7 @@ def GUI():
 
     serialsettings.put([menu[0][serialport]+","+menu[1][baud]]) #start serial port
     serialerror = False
+    rawdatabuf = []
 
     class sentence:
         def __init__(self, msg, txt):
@@ -124,9 +125,10 @@ def GUI():
                     screen.addstr((height-8)+i, 4+(l*12), menu[l][i], curses.color_pair(2))
                 elif l == 1 and i == baud: 
                     screen.addstr((height-8)+i, 4+(l*12), menu[l][i], curses.color_pair(2))
-                #elif l == 2:
-                #    if rawdata and i == 1:
-                #        screen.addstr((height-8)+i, 4+(l*12), menu[l][i], curses.color_pair(2))
+                elif l == 2 and i == 1 and rawdata:
+                    screen.addstr((height-8)+i, 4+(l*12), menu[l][i], curses.color_pair(2))
+                elif l == 2 and i == 0 and not rawdata:
+                    screen.addstr((height-8)+i, 4+(l*12), menu[l][i], curses.color_pair(2))
                 else:
                     screen.addstr((height-8)+i, 4+(l*12), menu[l][i], curses.color_pair(1))
         if serialerror:
@@ -139,7 +141,11 @@ def GUI():
         if rawdata:
             while not rawserial.empty():
                 rawstring = rawserial.get()
-                screen.addstr(20,0,rawstring)
+                rawdatabuf[0] += rawstring
+                try:
+                    screen.addstr(0, 0, str(rawdatabuf[0]))
+                except:
+                    pass
         else:
             found = False
             while not parsednmea.empty():
@@ -161,7 +167,6 @@ def GUI():
                         sentences.append(sentence(msgtype, msg))
             for s in range(len(sentences)):
                 screen.addstr(s, 0, str(sentences[s].msg))
-
 
         screen.refresh()
         time.sleep(0.05)
@@ -198,7 +203,10 @@ def NMEA():
         if serinit:
             data = ser.read(16)
             if rawmode:
-                rawserial.put(data.decode("utf-8"))
+                try:
+                    rawserial.put(data)
+                except:
+                    pass
             else:
                 try:
                     for msg in reader.next(data.decode("utf-8")):
