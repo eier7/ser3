@@ -92,16 +92,13 @@ def GUI():
         #########Settings menu
         event = screen.getch() 
         if event == ord("q"): break 
-        if event == ord("h"): menucursor[0], menucursor[1], serialport, baud, rawdata = menucontrol(menucursor[0], menucursor[1], "left", serialport, baud, rawdata)
-        if event == ord("j"): menucursor[0], menucursor[1], serialport, baud, rawdata = menucontrol(menucursor[0], menucursor[1], "down", serialport, baud, rawdata)
-        if event == ord("k"): menucursor[0], menucursor[1], serialport, baud, rawdata = menucontrol(menucursor[0], menucursor[1], "up", serialport, baud, rawdata)
-        if event == ord("l"): menucursor[0], menucursor[1], serialport, baud, rawdata = menucontrol(menucursor[0], menucursor[1], "right", serialport, baud, rawdata)
+        if event == ord("h"): menucursor[0], menucursor[1], serialport, baud, rawdata = menucontrol(menucursor[0], menucursor[1], "left", serialport, baud)
+        if event == ord("j"): menucursor[0], menucursor[1], serialport, baud, rawdata = menucontrol(menucursor[0], menucursor[1], "down", serialport, baud)
+        if event == ord("k"): menucursor[0], menucursor[1], serialport, baud, rawdata = menucontrol(menucursor[0], menucursor[1], "up", serialport, baud)
+        if event == ord("l"): menucursor[0], menucursor[1], serialport, baud, rawdata = menucontrol(menucursor[0], menucursor[1], "right", serialport, baud)
 
-        for l in range(len(menu)):
-            if(l == 0):
-                screen.addstr(height, (width-(l*12)), menu[l][serialport], curses.color_pair(2))
-            else:
-                screen.addstr(height, (width-(l*12)), menu[l][baudrate], curses.color_pair(2))
+        screen.addstr(2, 2, menu[0][serialport], curses.color_pair(2))
+        screen.addstr(4, 4, menu[1][baudrate], curses.color_pair(2))
         if serialerror:
             if int(time.time()) % 2 == 0:
                 screen.addstr(height-1, 0, "SERIAL PORT ERROR", curses.color_pair(4))
