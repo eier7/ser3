@@ -104,7 +104,6 @@ def GUI():
         if event == ord("l"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "right", serialport, baud)
         while not gpioq.empty():
             gpiodir = gpioq.get()
-            print(gpiodir)
             menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], gpiodir, serialport, baud)
             
 
@@ -178,18 +177,17 @@ def NMEA():
 ##GPIO buttons
 def GPIObuttons():
     while(True):
-        if not GPIO.input(17):
+        if not GPIO.input(27):
             gpioq.put("left")
-            print('NNENE')
-            time.sleep(.2)
+            time.sleep(.1)
         if not GPIO.input(23):
             gpioq.put("down")
-            time.sleep(.2)
+            time.sleep(.1)
         if not GPIO.input(22):
             gpioq.put("up")
-            time.sleep(.2)
+            time.sleep(.1)
         else:
-            time.sleep(.5)
+            time.sleep(.1)
 ##########################################
 ##########################################
 
