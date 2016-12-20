@@ -31,7 +31,7 @@ def GUI():
     menu = [
         ['ttyUSB0', 'ttyUSB1', 'ttyUSB2', 'ttyUSB3'],
         ['2400', '4800', '9600', '19200', '38400', '57600', '115200'],
-        ['scroll']
+        ['scroll'],
     ]
     serialport = 0
     baud = 1
@@ -115,15 +115,12 @@ def GUI():
             if menucursor[0] == 0: 
                 screen.addstr(height-1, 20, menu[0][serialport], curses.color_pair(3))
                 screen.addstr(height-1, 28, menu[1][baud], curses.color_pair(2))
-                screen.addstr(height-1, 40, menu[2][0], curses.color_pair(2))
             elif menucursor[0] == 1:
                 screen.addstr(height-1, 20, menu[0][serialport], curses.color_pair(2))
                 screen.addstr(height-1, 28, menu[1][baud], curses.color_pair(3))
-                screen.addstr(height-1, 35, menu[2][0], curses.color_pair(2))
             elif menucursor[0] == 2:
                 screen.addstr(height-1, 20, menu[0][serialport], curses.color_pair(2))
                 screen.addstr(height-1, 28, menu[1][baud], curses.color_pair(2))
-                screen.addstr(height-1, 35, menu[2][0], curses.color_pair(3))
         if serialerror:
             if int(time.time()) % 2 == 0:
                 screen.addstr(height-1, 0, "SERIAL PORT ERROR", curses.color_pair(4))
