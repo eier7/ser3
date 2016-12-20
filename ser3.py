@@ -109,11 +109,11 @@ def GUI():
 
         for m in range(len(menu)):
             if menucursor[0] == 0: 
-                screen.addstr(height-1, 20, menu[0][serialport], curses.color_pair(2))
-                screen.addstr(height-1, 30, menu[1][baud], curses.color_pair(1))
-            elif menucursor[0] == 1:
-                screen.addstr(height-1, 20, menu[0][serialport], curses.color_pair(1))
+                screen.addstr(height-1, 20, menu[0][serialport], curses.color_pair(3))
                 screen.addstr(height-1, 30, menu[1][baud], curses.color_pair(2))
+            elif menucursor[0] == 1:
+                screen.addstr(height-1, 20, menu[0][serialport], curses.color_pair(2))
+                screen.addstr(height-1, 30, menu[1][baud], curses.color_pair(3))
         if serialerror:
             if int(time.time()) % 2 == 0:
                 screen.addstr(height-1, 0, "SERIAL PORT ERROR", curses.color_pair(4))
@@ -140,7 +140,7 @@ def GUI():
                 if not found and msgtype != 'err':
                     sentences.append(sentence(msgtype, msg))
         for s in range(min(len(sentences), 10)):
-            screen.addstr(s, 0, str(sentences[s].msg).replace("\n", ""))
+            screen.addstr(s, 0, str(sentences[s].msg).replace("\n", "")[0:][:40])
 
         screen.refresh()
         time.sleep(0.05)
