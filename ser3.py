@@ -18,6 +18,7 @@ GPIO.setup(27, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 parsednmea = Queue(maxsize=0)
 serialsettings= Queue(maxsize=0)
+gpioq = Queue(maxsize=0)
 
 def GUI():
     screen = curses.initscr() 
@@ -95,11 +96,15 @@ def GUI():
         screen.erase()
         #########Settings menu
         event = screen.getch() 
-        if event == ord("q") or not GPIO.input(17): break 
-        if event == ord("h") or not GPIO.input(27): menucursor[1], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "left", serialport, baud);time.sleep(.2)
-        if event == ord("j") or not GPIO.input(22): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "down", serialport, baud);time.sleep(.2)
-        if event == ord("k") or not GPIO.input(23): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "up", serialport, baud);time.sleep(.2)
+        if event == ord("q"): break 
+        if event == ord("h"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "left", serialport, baud)
+        if event == ord("j"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "down", serialport, baud)
+        if event == ord("k"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "up", serialport, baud)
         if event == ord("l"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "right", serialport, baud)
+        while not gpioq.empty()
+            gpiodir = gpioq.get()
+            menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], gpiodir, serialport, baud)
+            
 
         for m in range(len(menu)):
             if menucursor[0] == 0: 
@@ -168,11 +173,26 @@ def NMEA():
         else:
             time.sleep(0.08)
 
+##GPIO buttons
+def GPIObuttons():
+    if not GPIO.input(17):
+        gpioq.put("left")
+        time.sleep(.2)
+    if not GPIO.input(23):
+        gpioq.put("down")
+        time.sleep(.2)
+    if not GPIO.input(22)
+        gpioq.put("up")
+        time.sleep(.2)
+    else:
+        time.sleep(.5)
 ##########################################
 ##########################################
 
 tgui = Thread(target=GUI)
 tnmea = Thread(target=NMEA)
+tGPIO = Thread(target=GPIObuttons)
 tnmea.setDaemon(True)
 tgui.start()
 tnmea.start()
+tGPIO.start()
