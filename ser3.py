@@ -113,17 +113,17 @@ def GUI():
 
         for m in range(len(menu)):
             if menucursor[0] == 0: 
-                screen.addstr(height-1, 16, menu[0][serialport], curses.color_pair(3))
-                screen.addstr(height-1, 23, menu[1][baud], curses.color_pair(2))
-                screen.addstr(height-1, 30, menu[1][0], curses.color_pair(2))
+                screen.addstr(height-1, 19, menu[0][serialport], curses.color_pair(3))
+                screen.addstr(height-1, 24, menu[1][baud], curses.color_pair(2))
+                screen.addstr(height-1, 31, menu[1][0], curses.color_pair(2))
             elif menucursor[0] == 1:
-                screen.addstr(height-1, 16, menu[0][serialport], curses.color_pair(2))
-                screen.addstr(height-1, 23, menu[1][baud], curses.color_pair(3))
-                screen.addstr(height-1, 30, menu[2][0], curses.color_pair(2))
+                screen.addstr(height-1, 19, menu[0][serialport], curses.color_pair(2))
+                screen.addstr(height-1, 24, menu[1][baud], curses.color_pair(3))
+                screen.addstr(height-1, 31, menu[2][0], curses.color_pair(2))
             elif menucursor[0] == 2:
-                screen.addstr(height-1, 16, menu[0][serialport], curses.color_pair(2))
-                screen.addstr(height-1, 23, menu[1][baud], curses.color_pair(2))
-                screen.addstr(height-1, 30, menu[2][0], curses.color_pair(3))
+                screen.addstr(height-1, 19, menu[0][serialport], curses.color_pair(2))
+                screen.addstr(height-1, 24, menu[1][baud], curses.color_pair(2))
+                screen.addstr(height-1, 31, menu[2][0], curses.color_pair(3))
         if serialerror:
             if int(time.time()) % 2 == 0:
                 screen.addstr(height-1, 0, "SERIAL PORT ERROR", curses.color_pair(4))
