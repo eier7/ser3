@@ -120,7 +120,7 @@ def GUI():
                 screen.addstr(height-1, 20, menu[0][serialport], curses.color_pair(2))
                 screen.addstr(height-1, 28, menu[1][baud], curses.color_pair(3))
                 screen.addstr(height-1, 35, menu[2][0], curses.color_pair(2))
-            elif menucursor[0] == 3:
+            elif menucursor[0] == 2:
                 screen.addstr(height-1, 20, menu[0][serialport], curses.color_pair(2))
                 screen.addstr(height-1, 28, menu[1][baud], curses.color_pair(2))
                 screen.addstr(height-1, 35, menu[2][0], curses.color_pair(3))
