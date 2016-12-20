@@ -52,7 +52,7 @@ def GUI():
         def __init__(self, msg, txt):
             self.msgtype = msg
             self.msg = txt
-    def menucontrol(xmenu, ymenu, movement, serialport, baud):
+    def menucontrol(xmenu, ymenu, movement, serialport, baud, scroll):
 
         if movement == "left":
             xmenu = xmenu-1
@@ -97,7 +97,7 @@ def GUI():
                 ymenu = baud
 
 
-        return xmenu, ymenu, serialport, baud
+        return xmenu, ymenu, serialport, baud, scroll
 
     while True: 
         screen.erase()
