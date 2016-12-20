@@ -115,7 +115,7 @@ def GUI():
             if menucursor[0] == 0: 
                 screen.addstr(height-1, 20, menu[0][serialport], curses.color_pair(3))
                 screen.addstr(height-1, 28, menu[1][baud], curses.color_pair(2))
-                screen.addstr(height-1, 34, menu[2][0], curses.color_pair(2))
+                screen.addstr(height-1, 40, menu[2][0], curses.color_pair(2))
             elif menucursor[0] == 1:
                 screen.addstr(height-1, 20, menu[0][serialport], curses.color_pair(2))
                 screen.addstr(height-1, 28, menu[1][baud], curses.color_pair(3))
