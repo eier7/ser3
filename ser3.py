@@ -117,7 +117,7 @@ def GUI():
                 serialerror = False
             else:
                 try:
-                    msgtype = re.match("\$..(\w*),", msg).group(1)
+                    msgtype = re.match("[!|\$]..(\w*),", msg).group(1)
                 except:
                     msgtype = "err"
                 for item in sentences:
@@ -126,7 +126,7 @@ def GUI():
                         found = True
                 if not found and msgtype != 'err':
                     sentences.append(sentence(msgtype, msg))
-        for s in range(min(len(sentences), 7)):
+        for s in range(min(len(sentences), 10)):
             screen.addstr(s, 0, str(sentences[s].msg).replace("\n", ""))
 
         screen.refresh()
@@ -140,6 +140,7 @@ def NMEA():
     serinit = False
     port = ""
     baud = 0
+    data = ""
     while(True):
         while not serialsettings.empty():
             tset = serialsettings.get()
