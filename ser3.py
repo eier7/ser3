@@ -115,7 +115,7 @@ def GUI():
             if menucursor[0] == 0: 
                 screen.addstr(height-1, 19, menu[0][serialport], curses.color_pair(3))
                 screen.addstr(height-1, 24, menu[1][baud], curses.color_pair(2))
-                screen.addstr(height-1, 31, menu[1][0], curses.color_pair(2))
+                screen.addstr(height-1, 31, menu[2][0], curses.color_pair(2))
             elif menucursor[0] == 1:
                 screen.addstr(height-1, 19, menu[0][serialport], curses.color_pair(2))
                 screen.addstr(height-1, 24, menu[1][baud], curses.color_pair(3))
@@ -162,14 +162,14 @@ def GUI():
 def NMEA():
     serinit = False
     port = ""
-    baud = 0
+    baud = 1
     data = ""
     while(True):
         while not serialsettings.empty():
             tset = serialsettings.get()
             for s in tset:
                 s = s.split(",")
-                port = "/dev/"+s[0]
+                port = "/dev/tty"+s[0]
                 baud = s[1]
                 try:
                     ser = serial.Serial(port, baudrate=baud,  timeout=.1)
