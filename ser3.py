@@ -17,7 +17,6 @@ def GUI():
     curses.curs_set(0) 
     screen.nodelay(1)
     curses.start_color()
-    rawdata = False
 
     menu = [
         ['ttyUSB0', 'ttyUSB1', 'ttyUSB2'],
@@ -36,13 +35,12 @@ def GUI():
 
     serialsettings.put([menu[0][serialport]+","+menu[1][baud]]) #start serial port
     serialerror = False
-    rawdatabuf = []
 
     class sentence:
         def __init__(self, msg, txt):
             self.msgtype = msg
             self.msg = txt
-    def menucontrol(xmenu, ymenu, movement, serialport, baud, rawdata):
+    def menucontrol(xmenu, ymenu, movement, serialport, baud):
 
         if movement == "left":
             xmenu = xmenu-1
@@ -62,8 +60,6 @@ def GUI():
                 ymenu = min(len(menu[1])-1, ymenu)
                 baud = ymenu
                 serialsettings.put([menu[0][serialport]+","+menu[1][baud]])
-                if ymenu > 1:
-                    ymenu = 1
 
         if movement == "up":
             ymenu = ymenu-1
@@ -92,13 +88,18 @@ def GUI():
         #########Settings menu
         event = screen.getch() 
         if event == ord("q"): break 
-        if event == ord("h"): menucursor[0], menucursor[1], serialport, baud, rawdata = menucontrol(menucursor[0], menucursor[1], "left", serialport, baud)
-        if event == ord("j"): menucursor[0], menucursor[1], serialport, baud, rawdata = menucontrol(menucursor[0], menucursor[1], "down", serialport, baud)
-        if event == ord("k"): menucursor[0], menucursor[1], serialport, baud, rawdata = menucontrol(menucursor[0], menucursor[1], "up", serialport, baud)
-        if event == ord("l"): menucursor[0], menucursor[1], serialport, baud, rawdata = menucontrol(menucursor[0], menucursor[1], "right", serialport, baud)
+        if event == ord("h"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "left", serialport, baud)
+        if event == ord("j"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "down", serialport, baud)
+        if event == ord("k"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "up", serialport, baud)
+        if event == ord("l"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "right", serialport, baud)
 
-        screen.addstr(2, 2, menu[0][serialport], curses.color_pair(2))
-        screen.addstr(4, 4, menu[1][baudrate], curses.color_pair(2))
+        for m in range(len(menu)):
+            if menucursor[0] == 0: 
+                screen.addstr(height-1, 20, menu[0][serialport], curses.color_pair(2))
+                screen.addstr(height-1, 30, menu[1][baud], curses.color_pair(1))
+            elif menucursor[0] == 1:
+                screen.addstr(height-1, 20, menu[0][serialport], curses.color_pair(1))
+                screen.addstr(height-1, 30, menu[1][baud], curses.color_pair(2))
         if serialerror:
             if int(time.time()) % 2 == 0:
                 screen.addstr(height-1, 0, "SERIAL PORT ERROR", curses.color_pair(4))
@@ -141,6 +142,7 @@ def NMEA():
     baud = 0
     while(True):
         while not serialsettings.empty():
+            tset = serialsettings.get()
             for s in tset:
                 s = s.split(",")
                 port = "/dev/"+s[0]
