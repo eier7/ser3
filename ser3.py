@@ -8,6 +8,13 @@ import serial
 import re
 from queue import Queue
 from threading import Thread
+import RPi.GPIO as GPIO
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(22, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(27, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 parsednmea = Queue(maxsize=0)
 serialsettings= Queue(maxsize=0)
@@ -45,7 +52,7 @@ def GUI():
 
         if movement == "left":
             xmenu = xmenu-1
-            xmenu = max(xmenu, 0)
+            xmenu = xmenu % len(menu)
             if xmenu == 0:
                 ymenu = serialport
             elif xmenu == 1:
@@ -75,7 +82,7 @@ def GUI():
 
         if movement == "right":
             xmenu = xmenu+1
-            xmenu = min(len(menu)-1, xmenu)
+            xmenu = xmenu % len(menu)
             if xmenu == 0:
                 ymenu = serialport
             elif xmenu == 1:
@@ -89,9 +96,9 @@ def GUI():
         #########Settings menu
         event = screen.getch() 
         if event == ord("q"): break 
-        if event == ord("h"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "left", serialport, baud)
-        if event == ord("j"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "down", serialport, baud)
-        if event == ord("k"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "up", serialport, baud)
+        if event == ord("h") or not GPIO.input(27): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "left", serialport, baud)
+        if event == ord("j") or not GPIO.input(22): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "down", serialport, baud)
+        if event == ord("k") or not GPIO.input(23): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "up", serialport, baud)
         if event == ord("l"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "right", serialport, baud)
 
         for m in range(len(menu)):
@@ -149,7 +156,7 @@ def NMEA():
                 port = "/dev/"+s[0]
                 baud = s[1]
                 try:
-                    ser = serial.Serial(port, baudrate=baud,  timeout=1)
+                    ser = serial.Serial(port, baudrate=baud,  timeout=.1)
                     serinit = True
                     parsednmea.put("OK")
                 except:
