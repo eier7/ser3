@@ -181,7 +181,7 @@ def GPIObuttons():
     if not GPIO.input(23):
         gpioq.put("down")
         time.sleep(.2)
-    if not GPIO.input(22)
+    if not GPIO.input(22):
         gpioq.put("up")
         time.sleep(.2)
     else:
