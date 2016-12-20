@@ -95,10 +95,10 @@ def GUI():
         screen.erase()
         #########Settings menu
         event = screen.getch() 
-        if event == ord("q"): break 
-        if event == ord("h") or not GPIO.input(27): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "left", serialport, baud)
-        if event == ord("j") or not GPIO.input(22): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "down", serialport, baud)
-        if event == ord("k") or not GPIO.input(23): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "up", serialport, baud)
+        if event == ord("q") or not GPIO.input(17): break 
+        if event == ord("h") or not GPIO.input(27): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "left", serialport, baud);sleep(.2)
+        if event == ord("j") or not GPIO.input(22): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "down", serialport, baud);sleep(.2)
+        if event == ord("k") or not GPIO.input(23): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "up", serialport, baud);sleep(.2)
         if event == ord("l"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "right", serialport, baud)
 
         for m in range(len(menu)):
