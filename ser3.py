@@ -73,7 +73,7 @@ def GUI():
                 baud = ymenu
                 serialsettings.put([menu[0][serialport]+","+menu[1][baud]])
             elif xmenu == 2:
-                scroll=max(scroll-1, 0)
+                scroll=scroll+1
 
         if movement == "up":
             ymenu = ymenu-1
@@ -86,7 +86,7 @@ def GUI():
                 baud = ymenu
                 serialsettings.put([menu[0][serialport]+","+menu[1][baud]])
             elif xmenu == 2:
-                scroll=scroll+1
+                scroll=max(scroll-1, 0)
 
         if movement == "right":
             xmenu = xmenu+1
