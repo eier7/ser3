@@ -101,7 +101,7 @@ def GUI():
         if event == ord("j"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "down", serialport, baud)
         if event == ord("k"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "up", serialport, baud)
         if event == ord("l"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "right", serialport, baud)
-        while not gpioq.empty()
+        while not gpioq.empty():
             gpiodir = gpioq.get()
             menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], gpiodir, serialport, baud)
             
