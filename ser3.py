@@ -118,12 +118,12 @@ def GUI():
                 try:
                     msgtype = msg.__dict__['sentence_type']
                 except:
-                    pass
+                    msgtype = "err"
                 for item in sentences:
                     if item.msgtype ==  msgtype:
                         item.msg = msg
                         found = True
-                if not found and msgtype:
+                if not found and msgtype != 'err':
                     sentences.append(sentence(msgtype, msg))
         for s in range(min(len(sentences), 3)):
             screen.addstr(min(s,2), 0, str(sentences[s].msg))
