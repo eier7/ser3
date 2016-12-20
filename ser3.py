@@ -176,8 +176,10 @@ def NMEA():
 
 ##GPIO buttons
 def GPIObuttons():
+    print("jajaj")
     if not GPIO.input(17):
         gpioq.put("left")
+        print('NNENE')
         time.sleep(.2)
     if not GPIO.input(23):
         gpioq.put("down")
