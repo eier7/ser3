@@ -123,10 +123,10 @@ def GUI():
                     if item.msgtype ==  msgtype:
                         item.msg = msg
                         found = True
-                if not found:
+                if not found and msgtype:
                     sentences.append(sentence(msgtype, msg))
-        for s in range(len(sentences)):
-            screen.addstr(s, 0, str(sentences[s].msg))
+        for s in range(min(len(sentences), 3)):
+            screen.addstr(min(s,2), 0, str(sentences[s].msg))
 
         screen.refresh()
         time.sleep(0.05)
