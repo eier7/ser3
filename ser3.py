@@ -5,6 +5,7 @@ import curses
 import time
 import pynmea2
 import serial
+import re
 from queue import Queue
 from threading import Thread
 
@@ -107,8 +108,8 @@ def GUI():
                 screen.addstr(height-1, 0, "SERIAL PORT ERROR", curses.color_pair(5))
         screen.refresh()
         ######data display
-        found = False
         while not parsednmea.empty():
+            found = False
             msg = parsednmea.get()
             if msg == "ERROR":
                 serialerror = True
@@ -116,7 +117,7 @@ def GUI():
                 serialerror = False
             else:
                 try:
-                    msgtype = msg.__dict__['sentence_type']
+                    msgtype = re.match("\$..(\w*),", msg).group(1)
                 except:
                     msgtype = "err"
                 for item in sentences:
@@ -125,8 +126,8 @@ def GUI():
                         found = True
                 if not found and msgtype != 'err':
                     sentences.append(sentence(msgtype, msg))
-        for s in range(min(len(sentences), 3)):
-            screen.addstr(min(s,2), 0, str(sentences[s].msg))
+        for s in range(min(len(sentences), 7)):
+            screen.addstr(s, 0, str(sentences[s].msg).replace("\n", ""))
 
         screen.refresh()
         time.sleep(0.05)
@@ -137,7 +138,6 @@ def GUI():
 ##serial handling
 def NMEA():
     serinit = False
-    reader = pynmea2.NMEAStreamReader()
     port = ""
     baud = 0
     while(True):
@@ -155,12 +155,8 @@ def NMEA():
                     serinit = False
                     parsednmea.put("ERROR")
         if serinit:
-            data = ser.read(16)
-            try:
-                for msg in reader.next(data.decode("utf-8")):
-                    parsednmea.put(msg) 
-            except:
-                pass
+            data = ser.readline().decode("utf-8", "ignore")
+            parsednmea.put(data) 
         else:
             time.sleep(0.08)
 
