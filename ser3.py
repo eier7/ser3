@@ -8,13 +8,6 @@ import serial
 import re
 from queue import Queue
 from threading import Thread
-import RPi.GPIO as GPIO
-
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(22, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(27, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 parsednmea = Queue(maxsize=0)
 serialsettings= Queue(maxsize=0)
@@ -176,19 +169,26 @@ def NMEA():
 
 ##GPIO buttons
 def GPIObuttons():
-    print("jajaj")
-    if not GPIO.input(17):
-        gpioq.put("left")
-        print('NNENE')
-        time.sleep(.2)
-    if not GPIO.input(23):
-        gpioq.put("down")
-        time.sleep(.2)
-    if not GPIO.input(22):
-        gpioq.put("up")
-        time.sleep(.2)
-    else:
-        time.sleep(.5)
+    import RPi.GPIO as GPIO
+
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(22, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(27, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    while(True):
+        if not GPIO.input(17):
+            gpioq.put("left")
+            print('NNENE')
+            time.sleep(.2)
+        if not GPIO.input(23):
+            gpioq.put("down")
+            time.sleep(.2)
+        if not GPIO.input(22):
+            gpioq.put("up")
+            time.sleep(.2)
+        else:
+            time.sleep(.5)
 ##########################################
 ##########################################
 
