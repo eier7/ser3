@@ -104,7 +104,10 @@ def GUI():
         if event == ord("l"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "right", serialport, baud)
         while not gpioq.empty():
             gpiodir = gpioq.get()
-            menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], gpiodir, serialport, baud)
+            if gpiodir == "clear":
+                sentences = []
+            else:
+                menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], gpiodir, serialport, baud)
             
 
         for m in range(len(menu)):
@@ -139,7 +142,7 @@ def GUI():
                         found = True
                 if not found and msgtype != 'err':
                     sentences.append(sentence(msgtype, msg))
-        for s in range(min(len(sentences), 10)):
+        for s in range(min(len(sentences), 13)):
             screen.addstr(s, 0, str(sentences[s].msg).replace("\n", "")[0:][:40])
 
         screen.refresh()
@@ -185,6 +188,9 @@ def GPIObuttons():
             time.sleep(.1)
         if not GPIO.input(23):
             gpioq.put("up")
+            time.sleep(.1)
+        if not GPIO.input(17):
+            gpioq.put("clear")
             time.sleep(.1)
         else:
             time.sleep(.1)
