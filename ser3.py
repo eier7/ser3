@@ -143,7 +143,7 @@ def GUI():
             screen.addstr(s, 0, str(sentences[s].msg).replace("\n", "")[0:][:40])
 
         screen.refresh()
-        time.sleep(0.05)
+        time.sleep(0.2)
 
     curses.endwin()
     exit()
@@ -180,10 +180,10 @@ def GPIObuttons():
         if not GPIO.input(27):
             gpioq.put("left")
             time.sleep(.1)
-        if not GPIO.input(23):
+        if not GPIO.input(22):
             gpioq.put("down")
             time.sleep(.1)
-        if not GPIO.input(22):
+        if not GPIO.input(23):
             gpioq.put("up")
             time.sleep(.1)
         else:
