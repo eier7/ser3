@@ -36,6 +36,7 @@ def GUI():
     serialport = 0
     baud = 1
     sentences = []
+    scroll = 0
     menucursor = [0,0]
     height, width = screen.getmaxyx()
     curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)#plain
@@ -71,6 +72,8 @@ def GUI():
                 ymenu = min(len(menu[1])-1, ymenu)
                 baud = ymenu
                 serialsettings.put([menu[0][serialport]+","+menu[1][baud]])
+            elif xmenu == 2:
+                scroll=max(scroll-1, 0)
 
         if movement == "up":
             ymenu = ymenu-1
@@ -82,6 +85,8 @@ def GUI():
                 ymenu = max(0, ymenu)
                 baud = ymenu
                 serialsettings.put([menu[0][serialport]+","+menu[1][baud]])
+            elif xmenu == 2:
+                scroll=scroll+1
 
         if movement == "right":
             xmenu = xmenu+1
@@ -99,16 +104,16 @@ def GUI():
         #########Settings menu
         event = screen.getch() 
         if event == ord("q"): break 
-        if event == ord("h"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "left", serialport, baud)
-        if event == ord("j"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "down", serialport, baud)
-        if event == ord("k"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "up", serialport, baud)
-        if event == ord("l"): menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], "right", serialport, baud)
+        if event == ord("h"): menucursor[0], menucursor[1], serialport, baud, scroll = menucontrol(menucursor[0], menucursor[1], "left", serialport, baud, scroll)
+        if event == ord("j"): menucursor[0], menucursor[1], serialport, baud, scroll = menucontrol(menucursor[0], menucursor[1], "down", serialport, baud, scroll)
+        if event == ord("k"): menucursor[0], menucursor[1], serialport, baud, scroll = menucontrol(menucursor[0], menucursor[1], "up", serialport, baud, scroll)
+        if event == ord("l"): menucursor[0], menucursor[1], serialport, baud, scroll = menucontrol(menucursor[0], menucursor[1], "right", serialport, baud, scroll)
         while not gpioq.empty():
             gpiodir = gpioq.get()
             if gpiodir == "clear":
                 sentences = []
             else:
-                menucursor[0], menucursor[1], serialport, baud = menucontrol(menucursor[0], menucursor[1], gpiodir, serialport, baud)
+                menucursor[0], menucursor[1], serialport, baud, scroll = menucontrol(menucursor[0], menucursor[1], gpiodir, serialport, baud, scroll)
             
 
         for m in range(len(menu)):
@@ -150,7 +155,7 @@ def GUI():
                 if not found and msgtype != 'err':
                     sentences.append(sentence(msgtype, msg))
         for s in range(min(len(sentences), 13)):
-            screen.addstr(s, 0, str(sentences[s].msg).replace("\n", "")[0:][:40])
+            screen.addstr(s, 0, str(sentences[s].msg).replace("\n", "")[scroll:][:40])
 
         screen.refresh()
         time.sleep(0.2)
